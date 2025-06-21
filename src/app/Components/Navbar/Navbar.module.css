@@ -1,0 +1,101 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* vertically center the links & logo */
+  overflow: visible; /* allow dropdowns to spill out */
+  width: 100%;
+  background-color: #fff;
+  padding: 1rem;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 0 10px;
+  margin: 0;
+  align-items: center;
+}
+
+.listItem {
+  margin: 0 15px;
+  position: relative;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Marker for dropdown items */
+.hasDropdown {
+}
+
+/* Glitchy “ghost text” effect on items without a dropdown */
+.listItem:not(.hasDropdown)::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  color: #46464665;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  z-index: -1;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 16px 8px;
+}
+
+.listItem:not(.hasDropdown):hover::before {
+  opacity: 1;
+  transform: translate(-6px, -6px);
+}
+
+.link {
+  color: #2f2f2f;
+  text-decoration: none;
+  padding: 16px 8px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem); /* just beneath the <a> */
+  left: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  list-style: none;
+  margin: 0;
+  min-width: 200px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eee;
+  z-index: 100;
+}
+
+.dropdownItem {
+  margin: 0;
+  padding: 0;
+}
+
+.dropdownLink {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dropdownLink:hover {
+  background-color: #f3f4f6;
+  color: #1d4ed8;
+}
