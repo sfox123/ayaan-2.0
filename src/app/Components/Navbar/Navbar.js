@@ -21,7 +21,31 @@ const Items = [
       { title: "Antarctica", link: "/destinations/antarctica" },
     ],
   },
-  { title: "Tours", link: "/tours" },
+  {
+    title: "Tours",
+    link: "/tours",
+    dropDown: true,
+    dropDownItems: [
+      {
+        title: "Adventure Tours",
+        link: "/tours/adventure",
+        dropDown: true,
+        dropDownItems: [
+          { title: "Hiking", link: "/tours/adventure/hiking" },
+          { title: "Cycling", link: "/tours/adventure/cycling" },
+        ],
+      },
+      {
+        title: "Relaxation Tours",
+        link: "/tours/relaxation",
+        dropDown: true,
+        dropDownItems: [
+          { title: "Beach Holidays", link: "/tours/relaxation/beach" },
+          { title: "Spa Retreats", link: "/tours/relaxation/spa" },
+        ],
+      },
+    ],
+  },
   { title: "Taxi", link: "/taxi" },
   { title: "Gallery", link: "/gallery" },
   { title: "Contact", link: "/contact" },
@@ -30,48 +54,68 @@ const Items = [
 ];
 
 export default function Navbar() {
-  const [activeDropdown, setActiveDropdown] = React.useState(null);
+  const [activePath, setActivePath] = React.useState([]);
 
   const listLeft = Items.slice(0, 4);
   const listRight = Items.slice(4);
 
-  const renderNavItem = (item) => (
-    <li
-      key={item.title}
-      className={`${styles.listItem} ${
-        item.dropDown ? styles.hasDropdown : ""
-      }`}
-      data-text={item.title}
-      onMouseEnter={() => item.dropDown && setActiveDropdown(item.title)}
-      onMouseLeave={() => item.dropDown && setActiveDropdown(null)}
+  const handleEnter = (level, title) => {
+    if (title) {
+      setActivePath((prev) => {
+        const next = prev.slice(0, level);
+        next[level] = title;
+        return next;
+      });
+    }
+  };
+
+  const handleLeave = (level) => {
+    setActivePath((prev) => prev.slice(0, level));
+  };
+
+  const renderItems = (items, level = 0) => (
+    <ul
+      className={
+        level === 0
+          ? styles.list
+          : `${styles.dropdownMenu} ${styles.submenu}`
+      }
     >
-      <a href={item.link} className={styles.link}>
-        {item.title}
-        {item.dropDown && <span style={{ marginLeft: "8px" }}>&#9662;</span>}
-      </a>
-      {item.dropDown && activeDropdown === item.title && (
-        <ul className={styles.dropdownMenu}>
-          {item.dropDownItems.map((sub) => (
-            <li key={sub.title} className={styles.dropdownItem}>
-              <a href={sub.link} className={styles.dropdownLink}>
-                {sub.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
+      {items.map((item) => (
+        <li
+          key={`${level}-${item.title}`}
+          className={`${styles.listItem} ${
+            item.dropDown ? styles.hasDropdown : ""
+          }`}
+          data-text={item.title}
+          onMouseEnter={() => item.dropDown && handleEnter(level, item.title)}
+          onMouseLeave={() => item.dropDown && handleLeave(level)}
+        >
+          <a
+            href={item.link}
+            className={level === 0 ? styles.link : styles.dropdownLink}
+          >
+            {item.title}
+            {item.dropDown && (
+              <span className={styles.arrow}>
+                {level === 0 ? "▼" : "▶"}
+              </span>
+            )}
+          </a>
+          {item.dropDown && activePath[level] === item.title &&
+            renderItems(item.dropDownItems, level + 1)}
+        </li>
+      ))}
+    </ul>
   );
 
   return (
     <nav className={styles.navbar}>
-      <ul className={styles.list}>{listLeft.map(renderNavItem)}</ul>
-
+      {renderItems(listLeft, 0)}
       <div className={styles.logo}>
         <Image src={logo} width={200} height={65} alt="logo" />
       </div>
-
-      <ul className={styles.list}>{listRight.map(renderNavItem)}</ul>
+      {renderItems(listRight, 0)}
     </nav>
   );
 }

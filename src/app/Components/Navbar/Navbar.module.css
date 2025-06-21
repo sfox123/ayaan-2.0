@@ -1,4 +1,5 @@
 .navbar {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center; /* vertically center the links & logo */
@@ -80,6 +81,12 @@
   z-index: 100;
 }
 
+.submenu {
+  top: 0;
+  left: 100%;
+  margin-left: 0.5rem;
+}
+
 .dropdownItem {
   margin: 0;
   padding: 0;
@@ -98,4 +105,9 @@
 .dropdownLink:hover {
   background-color: #f3f4f6;
   color: #1d4ed8;
+}
+
+.arrow {
+  margin-left: 8px;
+  font-size: 0.8em;
 }
